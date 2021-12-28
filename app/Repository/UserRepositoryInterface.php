@@ -10,7 +10,7 @@ interface UserRepositoryInterface
      * @param $id
      * @return bool
      */
-    public function findByTwitch($twitchId):User;
+    public function findByTwitch($twitchId):?User;
 
     public function store($twitchUserName, $twitchUserEmail, $twitchUserId, $twitchUserLogin, $twitchUserToken):User;
 

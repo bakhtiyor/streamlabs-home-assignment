@@ -8,7 +8,7 @@ use App\Repository\UserRepositoryInterface;
 class UserRepository implements UserRepositoryInterface
 {
 
-    public function findByTwitch($twitchId): User
+    public function findByTwitch($twitchId):?User
     {
         return User::where('twitch_id', $twitchId)->first();
     }

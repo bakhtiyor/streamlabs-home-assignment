@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('login-with-twitch', [AuthenticationController::class, 'loginWithTwitch'])->name('login-with-twitch');
+Route::get('twitch-callback', [AuthenticationController::class, 'twitchCallback'])->name('twitch-callback');
+
 Route::get('/', function () {
+    return view('welcome');
+});
+Route::get('/home', function () {
     return view('welcome');
 });
