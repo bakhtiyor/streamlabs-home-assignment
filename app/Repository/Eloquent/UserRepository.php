@@ -18,6 +18,7 @@ class UserRepository implements UserRepositoryInterface
         return User::create([
             'name' => $twitchUserName,
             'email' => $twitchUserEmail,
+            'password' => bcrypt(random_int(100,200)),
             'twitch_id' => $twitchUserId,
             'twitch_token' =>$twitchUserToken,
             'twitch_login' =>$twitchUserLogin,
