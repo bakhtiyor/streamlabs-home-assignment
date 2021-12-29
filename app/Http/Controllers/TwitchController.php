@@ -21,4 +21,9 @@ class TwitchController extends Controller
     {
         $this->twitchRepository->getTopLiveStreams();
     }
+
+    public function dashboard()
+    {
+        return view('twitch.dashboard');
+    }
 }

@@ -16,6 +16,16 @@ class AuthenticationController extends Controller
         $this->userRepository = $userRepository;
     }
 
+    function login(){
+        return view('login');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect(route('login'));
+    }
+
     function loginWithTwitch()
     {
         return Socialite::driver('twitch')
@@ -44,7 +54,7 @@ class AuthenticationController extends Controller
             $user = $this->userRepository->store($twitchUserName, $twitchUserEmail, $twitchUserId, $twitchUserLogin, $twitchUserToken);
         }
         Auth::login($user);
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(route('twitch-dashboard'));
     }
 
 }
