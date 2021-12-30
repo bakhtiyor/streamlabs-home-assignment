@@ -34,6 +34,9 @@
                     <li class="nav-item">
                         <a class="nav-link @yield('menu-top-100-streams')" aria-current="page" href="{{route('top100-streams')}}">Top 100 Streams</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('menu-streams-by-hour')" aria-current="page" href="{{route('streams-by-hour')}}">Streams By Hour</a>
+                    </li>
                 </ul>
             </div>
         </div>

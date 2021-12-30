@@ -47,4 +47,12 @@ class DashboardRepository implements DashboardRepositoryInterface
                             ->take(100)
                             ->get();
     }
+
+    public function getStreamsByHour()
+    {
+        return Stream::selectRaw("date_format(started_at, '%Y-%m-%d %H') datetime, count(*) as total")
+                        ->groupBy("datetime")
+                        ->orderBy('datetime', 'desc')
+                        ->paginate(env('ROWS_PER_PAGE'));
+    }
 }

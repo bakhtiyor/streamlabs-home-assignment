@@ -8,4 +8,5 @@ interface DashboardRepositoryInterface
     public function getTopGames();
     public function getMedianForAllStreams();
     public function getTop100Streams($orderBy);
+    public function getStreamsByHour();
 }
