@@ -15,6 +15,7 @@
             <table class="table table-hover table-striped">
                 <thead>
                     <tr>
+                        <th scope="col">Game Thumbnail</th>
                         <th scope="col">Game Name</th>
                         <th scope="col">Number of viewers</th>
                     </tr>
@@ -22,8 +23,9 @@
                 <tbody>
                     @foreach($data as $row)
                         <tr>
+                            <td><img loading="lazy" src="{{$row['thumbnail_url']}}" class="thumbnail-img" /></td>
                             <td>{{$row['game_name']}}</td>
-                            <td>{{$row['viewer_count']}}</td>
+                            <td>{{number_format($row['viewer_count'], 0, '.', ' ')}}</td>
                         </tr>
                     @endforeach
                 </tbody>
