@@ -12,7 +12,7 @@ interface UserRepositoryInterface
      */
     public function findByTwitch($twitchId):?User;
 
-    public function store($twitchUserName, $twitchUserEmail, $twitchUserId, $twitchUserLogin, $twitchUserToken):User;
+    public function store($twitchUserName, $twitchUserEmail, $twitchUserId, $twitchUserLogin, $twitchUserToken, $twitchUserRefreshToken):User;
 
-    public function refreshToken($twitchId, $token);
+    public function refreshToken($twitchId, $token, $refreshToken);
 }

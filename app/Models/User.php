@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'twitch_id',
         'twitch_token',
+        'twitch_refresh_token',
         'twitch_login'
     ];
 

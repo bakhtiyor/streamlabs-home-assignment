@@ -37,7 +37,6 @@ class AuthenticationController extends Controller
     function twitchCallback()
     {
         $twitchUser = Socialite::driver('twitch')->user();
-
         if (is_null($twitchUser))
             return redirect(404);
 
@@ -46,12 +45,13 @@ class AuthenticationController extends Controller
         $twitchUserName = $twitchUser->getName();
         $twitchUserLogin = $twitchUser->user['login'];
         $twitchUserToken = $twitchUser->token;
+        $twitchRefreshToken = $twitchUser->refreshToken;
 
         $user = $this->userRepository->findByTwitch($twitchUser->getId());
         if ($user) {
-            $this->userRepository->refreshToken($twitchUserId, $twitchUserToken);
+            $this->userRepository->refreshToken($twitchUserId, $twitchUserToken, $twitchRefreshToken);
         }else{
-            $user = $this->userRepository->store($twitchUserName, $twitchUserEmail, $twitchUserId, $twitchUserLogin, $twitchUserToken);
+            $user = $this->userRepository->store($twitchUserName, $twitchUserEmail, $twitchUserId, $twitchUserLogin, $twitchUserToken, $twitchRefreshToken);
         }
         Auth::login($user);
         return redirect(route('twitch-dashboard'));
