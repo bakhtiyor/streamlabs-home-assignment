@@ -25,4 +25,18 @@ class DashboardRepository implements DashboardRepositoryInterface
                     ->groupBy('game_name')
                     ->paginate(env('ROWS_PER_PAGE'));
     }
+
+    public function getMedianForAllStreams()
+    {
+        $streamViewers =  Stream::select('viewer_count')->pluck('viewer_count')->toArray();
+        return $this->calculcateMedian($streamViewers);
+    }
+
+    private function calculcateMedian($data)
+    {
+        sort($data);
+        $dataSize = count($data);
+        return ($dataSize % 2 == 0) ? ($data[$dataSize / 2 - 1] + $data[$dataSize / 2]) / 2 : $data[$dataSize / 2];
+    }
+
 }

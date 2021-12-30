@@ -23,4 +23,10 @@ class DashboardController extends Controller
         $data = $this->dashboardRepository->getTotalNumberOfStreams();
         return view('dashboard.game-streams', ['data'=>$data]);
     }
+
+    public function getMedianForAllStreams()
+    {
+        $data = $this->dashboardRepository->getMedianForAllStreams();
+        return view('dashboard.median-streams', ['data'=>$data]);
+    }
 }

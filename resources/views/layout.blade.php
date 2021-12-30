@@ -28,6 +28,9 @@
                     <li class="nav-item">
                         <a class="nav-link @yield('menu-top-games')" aria-current="page" href="{{route('top-games')}}">Top Games</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('menu-median-streams')" aria-current="page" href="{{route('median-for-all-streams')}}">Median For Streams</a>
+                    </li>
                 </ul>
             </div>
         </div>
