@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Repository\TwitchRepositoryInterface;
+use Auth;
 
 class TwitchController extends Controller
 {
     private $twitchRepository;
-
     /**
      * @param $twitchRepository
      */
@@ -16,6 +16,15 @@ class TwitchController extends Controller
         $this->twitchRepository = $twitchRepository;
     }
 
+    public function fetchListOfTags()
+    {
+        $this->twitchRepository->initHttp(env('TWITCH_URL'),
+                    [
+                        'token'=>Auth::user()->twitch_token,
+                        'client_id'=>env('TWITCH_CLIENT_ID')
+                    ]);
+        $this->twitchRepository->fetchListOfTags();
+    }
 
     public function getTopLiveStreams()
     {
