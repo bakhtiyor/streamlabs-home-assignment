@@ -19,6 +19,7 @@ Route::middleware('web', 'auth')->group(function () {
     Route::get('/', [DashboardController::class, 'getTotalNumberOfStreams'])->name('twitch-dashboard');
     Route::get('/top-games', [DashboardController::class, 'getTopGames'])->name('top-games');
     Route::get('/median-for-all-streams', [DashboardController::class, 'getMedianForAllStreams'])->name('median-for-all-streams');
+    Route::get('/top100-streams', [DashboardController::class, 'getTop100Streams'])->name('top100-streams');
 //    Route::get('/game-streams', [DashboardController::class, 'getTotalNumberOfStreams'])->name('game-streams');
     Route::get('/fetch-top-streams',[TwitchController::class, 'fetchTopStreams']);
     Route::get('/fetch-list-of-tags',[TwitchController::class, 'fetchListOfTags']);

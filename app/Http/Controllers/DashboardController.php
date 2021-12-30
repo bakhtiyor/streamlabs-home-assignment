@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Repository\DashboardRepositoryInterface;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -28,5 +29,12 @@ class DashboardController extends Controller
     {
         $data = $this->dashboardRepository->getMedianForAllStreams();
         return view('dashboard.median-streams', ['data'=>$data]);
+    }
+
+    public function getTop100Streams(Request $request)
+    {
+        $orderBy = ($request->has('orderby')) ? $request->get('orderby') : 'desc';
+        $data = $this->dashboardRepository->getTop100Streams($orderBy);
+        return view('dashboard.top-100-streams', ['data'=>$data]);
     }
 }

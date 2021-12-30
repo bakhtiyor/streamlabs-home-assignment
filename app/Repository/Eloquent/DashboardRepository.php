@@ -39,4 +39,12 @@ class DashboardRepository implements DashboardRepositoryInterface
         return ($dataSize % 2 == 0) ? ($data[$dataSize / 2 - 1] + $data[$dataSize / 2]) / 2 : $data[$dataSize / 2];
     }
 
+    public function getTop100Streams($orderBy)
+    {
+        return Stream::selectRaw('game_name, thumbnail_url, viewer_count')
+                            ->where('game_name', '<>', null)
+                            ->orderBy('viewer_count', $orderBy)
+                            ->take(100)
+                            ->get();
+    }
 }
