@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Repository\API\TwitchRepository;
+use App\Repository\DashboardRepositoryInterface;
 use App\Repository\Eloquent\BaseRepository;
+use App\Repository\Eloquent\DashboardRepository;
 use App\Repository\Eloquent\UserRepository;
 use App\Repository\EloquentRepositoryInterface;
 use App\Repository\TwitchRepositoryInterface;
@@ -21,6 +23,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(TwitchRepositoryInterface::class, TwitchRepository::class);
+        $this->app->bind(DashboardRepositoryInterface::class, DashboardRepository::class);
     }
 
     /**

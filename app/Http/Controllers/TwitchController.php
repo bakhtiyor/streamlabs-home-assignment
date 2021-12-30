@@ -35,17 +35,12 @@ class TwitchController extends Controller
         $this->twitchRepository->init([
             'twitch_url' => env('TWITCH_URL'),
             'twitch_token_refresh_url' => env('TWITCH_TOKEN_REFRESH_URL'),
-            'token'=>Auth::user()->twitch_token,
+            'token'=>Autxh::user()->twitch_token,
             'refresh_token'=>Auth::user()->twitch_refresh_token,
             'client_id'=>env('TWITCH_CLIENT_ID'),
             'client_secret'=>env('TWITCH_CLIENT_SECRET'),
             'twitch_id'=>Auth::user()->twitch_id
         ]);
         $this->twitchRepository->fetchTopStreams();
-    }
-
-    public function dashboard()
-    {
-        return view('twitch.dashboard');
     }
 }

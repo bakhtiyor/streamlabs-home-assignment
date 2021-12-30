@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TwitchController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ use Illuminate\Http\Request;
 |
 */
 Route::middleware('web', 'auth')->group(function () {
-    Route::get('/', [TwitchController::class, 'dashboard'])->name('twitch-dashboard')->middleware('auth');
+    Route::get('/', [DashboardController::class, 'getTotalNumberOfStreams'])->name('twitch-dashboard');
+//    Route::get('/game-streams', [DashboardController::class, 'getTotalNumberOfStreams'])->name('game-streams');
     Route::get('/fetch-top-streams',[TwitchController::class, 'fetchTopStreams']);
     Route::get('/fetch-list-of-tags',[TwitchController::class, 'fetchListOfTags']);
 });
