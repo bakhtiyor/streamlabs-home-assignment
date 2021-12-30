@@ -152,7 +152,7 @@ class TwitchRepository implements TwitchRepositoryInterface
                             'viewer_count' => $data->viewer_count,
                             'started_at' => Carbon::parse($data->started_at)->format('Y-m-d H:i:s'),
                             'language' => $data->language,
-                            'thumbnail_url' => $data->thumbnail_url,
+                            'thumbnail_url' => str_replace('{height}', '120', str_replace('{width}', '214', $data->thumbnail_url)),
                             'is_mature' => $data->is_mature,
                         ]);
                         $tags = (isset($data->tag_ids)) ? $data->tag_ids : array();
