@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Repository\Twitch;
 use App\Repository\TwitchRepositoryInterface;
+use Arr;
 use Carbon\Carbon;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
@@ -135,7 +136,8 @@ class TwitchRepository implements TwitchRepositoryInterface
             $response = $Http->get($this->getStreamURL(), $options);
             if ($response->successful()) {
                 $responseBody = json_decode($response->body());
-                foreach ($responseBody->data as $data) {
+                $shuffledResponseBody = Arr::shuffle($responseBody->data);
+                foreach ($shuffledResponseBody as $data) {
                     $Steam = Stream::find($data->id);
                     if (!isset($Steam->id)) {
                         $Stream = Stream::create([
