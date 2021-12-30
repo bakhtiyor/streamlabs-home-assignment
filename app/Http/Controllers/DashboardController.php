@@ -13,6 +13,11 @@ class DashboardController extends Controller
         $this->dashboardRepository = $dashboardRepository;
     }
 
+    public function getTopGames()
+    {
+        $data = $this->dashboardRepository->getTopGames();
+        return view('dashboard.top-games', ['data'=>$data]);
+    }
     public function getTotalNumberOfStreams()
     {
         $data = $this->dashboardRepository->getTotalNumberOfStreams();

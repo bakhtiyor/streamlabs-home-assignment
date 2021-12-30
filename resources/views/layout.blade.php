@@ -18,10 +18,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{route('twitch-dashboard')}}}">Home</a>
+                        <a class="nav-link @yield('menu-game-streams')" aria-current="page" href="/">Game Streams</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Another link</a>
+                        <a class="nav-link @yield('menu-top-games')" aria-current="page" href="{{route('top-games')}}">Top Games</a>
                     </li>
                 </ul>
             </div>
