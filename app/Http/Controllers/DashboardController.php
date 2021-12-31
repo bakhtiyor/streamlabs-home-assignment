@@ -49,4 +49,10 @@ class DashboardController extends Controller
         $data = $this->dashboardRepository->getUserStreams();
         return view('dashboard.user-streams', ['data'=>$data]);
     }
+
+    public function getUserDistanceToTop(Request $request)
+    {
+        $data = $this->dashboardRepository->getNumViewersToMakeTop();
+        return view('dashboard.user-distance-to-top', ['data'=>$data]);
+    }
 }

@@ -41,6 +41,9 @@
                     <li class="nav-item">
                         <a class="nav-link @yield('menu-user-streams')" aria-current="page" href="{{route('user-streams')}}">User Streams</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('menu-user-distance-to-top')" aria-current="page" href="{{route('user-distance-to-top')}}">User Distance To Top</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {!!Auth::user()->name!!}

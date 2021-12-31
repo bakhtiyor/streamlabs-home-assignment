@@ -10,4 +10,5 @@ interface DashboardRepositoryInterface
     public function getTop100Streams($orderBy);
     public function getStreamsByHour();
     public function getUserStreams();
+    public function getNumViewersToMakeTop();
 }
