@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield("page-title")</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <style>
         .thumbnail-img{
             height: 50px;
@@ -37,12 +38,26 @@
                     <li class="nav-item">
                         <a class="nav-link @yield('menu-streams-by-hour')" aria-current="page" href="{{route('streams-by-hour')}}">Streams By Hour</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('menu-user-streams')" aria-current="page" href="{{route('user-streams')}}">User Streams</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {!!Auth::user()->name!!}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a href="#" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Log Out</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
 <main>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
     <div class="container">
         @yield('content')
     </div>

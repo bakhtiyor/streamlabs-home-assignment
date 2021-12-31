@@ -9,4 +9,5 @@ interface DashboardRepositoryInterface
     public function getMedianForAllStreams();
     public function getTop100Streams($orderBy);
     public function getStreamsByHour();
+    public function getUserStreams();
 }

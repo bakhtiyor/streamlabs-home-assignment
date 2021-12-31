@@ -17,7 +17,7 @@
                     <tr>
                         <th scope="col">N</th>
                         <th scope="col">Game Thumbnail</th>
-                        <th scope="col">Game Name</th>
+                        <th scope="col">Stream Name</th>
                         <th scope="col">Number of viewers
                             @if(isset($_GET['orderby']) && $_GET['orderby']=='asc')
                                 <a title="Descending Order" href="{{ route("top100-streams", ['orderby=desc']) }}">
@@ -43,7 +43,7 @@
                         <tr>
                             <td>{{++$index}}.</td>
                             <td><img loading="lazy" src="{{$row['thumbnail_url']}}" class="thumbnail-img" /></td>
-                            <td>{{$row['game_name']}}</td>
+                            <td>{{$row['title']}}</td>
                             <td>{{number_format($row['viewer_count'], 0, '.', ' ')}}</td>
                         </tr>
                     @endforeach

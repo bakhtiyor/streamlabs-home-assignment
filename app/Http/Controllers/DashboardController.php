@@ -37,9 +37,16 @@ class DashboardController extends Controller
         $data = $this->dashboardRepository->getTop100Streams($orderBy);
         return view('dashboard.top-100-streams', ['data'=>$data]);
     }
+
     public function getStreamsByHour(Request $request)
     {
         $data = $this->dashboardRepository->getStreamsByHour();
         return view('dashboard.streams-by-hour', ['data'=>$data]);
+    }
+
+    public function getUserStreams(Request $request)
+    {
+        $data = $this->dashboardRepository->getUserStreams();
+        return view('dashboard.user-streams', ['data'=>$data]);
     }
 }

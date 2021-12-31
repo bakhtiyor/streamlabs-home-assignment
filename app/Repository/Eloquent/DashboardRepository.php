@@ -3,7 +3,10 @@
 namespace App\Repository\Eloquent;
 
 use App\Models\Stream;
+use App\Models\UserStream;
 use App\Repository\DashboardRepositoryInterface;
+use Auth;
+use Illuminate\Database\Query\Builder;
 
 class DashboardRepository implements DashboardRepositoryInterface
 {
@@ -41,8 +44,8 @@ class DashboardRepository implements DashboardRepositoryInterface
 
     public function getTop100Streams($orderBy)
     {
-        return Stream::selectRaw('game_name, thumbnail_url, viewer_count')
-                            ->where('game_name', '<>', null)
+        return Stream::selectRaw('title, thumbnail_url, viewer_count')
+                            ->where('title', '<>', null)
                             ->orderBy('viewer_count', $orderBy)
                             ->take(100)
                             ->get();
@@ -54,5 +57,27 @@ class DashboardRepository implements DashboardRepositoryInterface
                         ->groupBy("datetime")
                         ->orderBy('datetime', 'desc')
                         ->paginate(env('ROWS_PER_PAGE'));
+    }
+
+    public function getUserStreams()
+    {
+// I could do it using following query but I am implemented this task using application layer as required in the task
+//        $userStreams = Stream::selectRaw('title, thumbnail_url, viewer_count')
+//                            ->whereHas('userStreams', function($query){
+//                                $query->where('user_id', Auth::user()->id);
+//                            })->get();
+        $topStreams = Stream::selectRaw('id, title, thumbnail_url, viewer_count')
+                    ->take(1000)
+                    ->where('title', '<>', null)
+                    ->orderBy('viewer_count', 'desc')
+                    ->get();
+        $userStreams = UserStream::where('user_id', Auth::user()->id)->pluck('stream_id')->toArray();
+        $selectedStreams = array();
+        foreach($topStreams as $topStream){
+            if (in_array($topStream->id, $userStreams)){
+                $selectedStreams[] = $topStream;
+            }
+        }
+        return $selectedStreams;
     }
 }

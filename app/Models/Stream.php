@@ -22,9 +22,13 @@ class Stream extends Model
         'is_mature',
     ];
 
-        protected $primaryKey = "id";
     public function tags()
     {
         return $this->hasMany(StreamTag::class);
+    }
+
+    public function userStreams()
+    {
+        return $this->hasMany(UserStream::class);
     }
 }
