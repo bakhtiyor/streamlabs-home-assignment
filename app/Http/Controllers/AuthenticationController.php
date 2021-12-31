@@ -54,7 +54,9 @@ class AuthenticationController extends Controller
             $user = $this->userRepository->store($twitchUserName, $twitchUserEmail, $twitchUserId, $twitchUserLogin, $twitchUserToken, $twitchRefreshToken);
         }
         Auth::login($user);
-        return redirect(route('twitch-dashboard'));
+
+
+        return redirect(route('fetch-user-streams'));
     }
 
 }

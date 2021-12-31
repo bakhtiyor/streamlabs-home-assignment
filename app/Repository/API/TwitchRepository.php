@@ -4,11 +4,14 @@ namespace App\Repository\API;
 
 use App;
 use App\Models\Stream;
+use App\Models\StreamTag;
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\UserStream;
 use App\Repository\Twitch;
 use App\Repository\TwitchRepositoryInterface;
 use Arr;
+use Auth;
 use Carbon\Carbon;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
@@ -42,6 +45,11 @@ class TwitchRepository implements TwitchRepositoryInterface
     private function getStreamURL()
     {
         return $this->parameters['twitch_url'].'streams';
+    }
+
+    private function getUserStreamURL()
+    {
+        return $this->parameters['twitch_url'].'streams/followed';
     }
 
     private function getRefreshTokenURL()
@@ -138,8 +146,8 @@ class TwitchRepository implements TwitchRepositoryInterface
                 $responseBody = json_decode($response->body());
                 $shuffledResponseBody = Arr::shuffle($responseBody->data);
                 foreach ($shuffledResponseBody as $data) {
-                    $Steam = Stream::find($data->id);
-                    if (!isset($Steam->id)) {
+                    $Stream = Stream::find($data->id);
+                    if (!isset($Stream->id)) {
                         $Stream = Stream::create([
                             'id' => $data->id,
                             'user_id' => $data->user_id,
@@ -157,7 +165,7 @@ class TwitchRepository implements TwitchRepositoryInterface
                         ]);
                         $tags = (isset($data->tag_ids)) ? $data->tag_ids : array();
                         foreach ($tags as $tag) {
-                            $Stream->tags()->create(['stream_id' => $Stream->id, 'tag_id' => $tag]);
+                            StreamTag::updateOrCreate(['stream_id' => $Stream->id, 'tag_id' => $tag], []);
                         }
                     }
                 }
@@ -171,6 +179,63 @@ class TwitchRepository implements TwitchRepositoryInterface
                 //Unauthorized
                 if ($this->refreshToken())
                     $this->fetchTopStreams();
+                else
+                    $hasNextPage = false;
+            } else {
+                $hasNextPage = false;
+            }
+        }
+    }
+
+    public function fetchUserStreams()
+    {
+        $hasNextPage = true; $cursor = null; $options = ['first'=>100, 'user_id'=>$this->parameters['twitch_id']]; $iterations=0;
+        while($hasNextPage) {
+            $iterations ++;
+            if (!is_null($cursor)) $options['after'] = $cursor;
+            $Http = Http::withHeaders($this->getHeaders())->acceptJson();
+            if (App::environment('local')) {
+                $Http->setHandler($this->getHandler());
+            }
+            $response = $Http->get($this->getUserStreamURL(), $options);
+            if ($response->successful()) {
+                $responseBody = json_decode($response->body());
+                foreach ($responseBody->data as $data) {
+                    $Stream = Stream::find($data->id);
+                    if (!isset($Stream->id)) {
+                        $Stream = Stream::create([
+                            'id' => $data->id,
+                            'user_id' => $data->user_id,
+                            'user_login' => $data->user_login,
+                            'user_name' => $data->user_name,
+                            'game_id' => (!empty($data->game_id)) ? $data->game_id : null,
+                            'game_name' => $data->game_name,
+                            'type' => $data->type,
+                            'title' => $data->title,
+                            'viewer_count' => $data->viewer_count,
+                            'started_at' => Carbon::parse($data->started_at)->format('Y-m-d H:i:s'),
+                            'language' => $data->language,
+                            'thumbnail_url' => str_replace('{height}', '120', str_replace('{width}', '214', $data->thumbnail_url)),
+                            'is_mature' => $data->is_mature,
+                        ]);
+                        $tags = (isset($data->tag_ids)) ? $data->tag_ids : array();
+                        foreach ($tags as $tag) {
+                            StreamTag::updateOrCreate(['stream_id' => $Stream->id, 'tag_id' => $tag], []);
+                        }
+                    }
+                    UserStream::updateOrCreate(['user_id'=>Auth::user()->id, 'stream_id'=> $Stream->id], []);
+
+                }
+                if (isset($responseBody->pagination) && isset($responseBody->pagination->cursor) && $iterations<=10)
+                    $cursor = $responseBody->pagination->cursor;
+                else if ($iterations>=10)
+                    $hasNextPage = false;
+                else
+                    $hasNextPage = false;
+            } else if($response->status()==401){
+                //Unauthorized
+                if ($this->refreshToken())
+                    $this->fetchUserStreams();
                 else
                     $hasNextPage = false;
             } else {
