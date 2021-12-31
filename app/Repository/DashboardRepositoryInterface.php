@@ -11,4 +11,5 @@ interface DashboardRepositoryInterface
     public function getStreamsByHour();
     public function getUserStreams();
     public function getNumViewersToMakeTop();
+    public function getSharedTags();
 }

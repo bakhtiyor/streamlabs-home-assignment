@@ -3,6 +3,7 @@
 namespace App\Repository\Eloquent;
 
 use App\Models\Stream;
+use App\Models\Tag;
 use App\Models\UserStream;
 use App\Repository\DashboardRepositoryInterface;
 use Auth;
@@ -50,7 +51,7 @@ class DashboardRepository implements DashboardRepositoryInterface
     }
 
     // used application layer #1
-    // note: Even if it is much easier and effective to solve this task using database queries I did it using arrays because of the task requirements
+    // note: Even if it is much easier and efficient to solve this task using database queries I did it using arrays because of the task requirements
     public function getUserStreams()
     {
         $topStreams = Stream::selectRaw('id, title, thumbnail_url, viewer_count')
@@ -83,7 +84,7 @@ class DashboardRepository implements DashboardRepositoryInterface
     }
 
     // used application layer #3
-    // note: Even if it is much easier and effective to solve this task using database queries I did it using arrays because of the task requirements
+    // note: Even if it is much easier and efficient to solve this task using database queries I did it using arrays because of the task requirements
     public function getNumViewersToMakeTop()
     {
         //SELECT min(viewer_count), id FROM streamstats.streams where id in (select stream_id from user_streams where user_id=2)
@@ -91,7 +92,6 @@ class DashboardRepository implements DashboardRepositoryInterface
                                             ->whereHas('userStreams', function($query){
                                                 $query->where('user_id', Auth::user()->id);
                                             })->first();
-        //dd($UserStreamWithMinViewers->viewer_count);
         $topStreamViewerCounts = Stream::selectRaw('viewer_count')
                             ->take(1000)
                             ->where('title', '<>', null)
@@ -100,5 +100,42 @@ class DashboardRepository implements DashboardRepositoryInterface
                             ->toArray();
         $topMinViewerCountStream = min($topStreamViewerCounts);
         return $topMinViewerCountStream-$UserMinViewerCountStream->viewer_count;
+    }
+
+    // used application layer #4
+    // note: Even if it is much easier and efficient to solve this task using database queries I did it using arrays because of the task requirements
+    public function getSharedTags(){
+        $userStreams = Stream::whereHas('userStreams', function($query){
+                                $query->where('user_id', Auth::user()->id);
+                            })
+                            ->with('tags')
+                            ->get();
+        $topStreams = Stream::take(1000)->orderBy('viewer_count', 'desc')->with('tags')->get();
+        $sharedTagList = array();
+        foreach($topStreams as $topStream){
+            foreach($userStreams as $userStream){
+                $this->findSharedTags($userStream->tags, $topStream->tags, $sharedTagList);
+            }
+        }
+
+        return $sharedTagList;
+    }
+
+    private function findSharedTags($userStreamTags, $topStreamTags, &$sharedTagList)
+    {
+        foreach($topStreamTags as $topStreamTag){
+            foreach($userStreamTags as $userStreamTag){
+                if ($userStreamTag->tag_id == $topStreamTag->tag_id){
+                    $isNewTag = true;
+                    foreach($sharedTagList as $sharedTag){
+                        if ($sharedTag->tag_id==$userStreamTag->tag_id){
+                            $isNewTag = false;
+                            break;
+                        }
+                    }
+                    if ($isNewTag) $sharedTagList[] = $userStreamTag;
+                }
+            }
+        }
     }
 }

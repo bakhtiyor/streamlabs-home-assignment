@@ -11,4 +11,9 @@ class StreamTag extends Model
         'tag_id',
     ];
     public $timestamps = false;
+
+    public function tag()
+    {
+        return $this->belongsTo(Tag::class, 'tag_id', 'tag_id');
+    }
 }

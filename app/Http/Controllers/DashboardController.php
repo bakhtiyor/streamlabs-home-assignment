@@ -55,4 +55,12 @@ class DashboardController extends Controller
         $data = $this->dashboardRepository->getNumViewersToMakeTop();
         return view('dashboard.user-distance-to-top', ['data'=>$data]);
     }
+
+    public function getSharedTags(Request $request)
+    {
+        $data = $this->dashboardRepository->getSharedTags();
+        return view('dashboard.shared-tags', ['data'=>$data]);
+    }
+
+
 }

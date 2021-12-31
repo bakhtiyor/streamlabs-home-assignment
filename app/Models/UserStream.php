@@ -11,4 +11,9 @@ class UserStream extends Model
         'user_id',
     ];
     public $timestamps = false;
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
 }
